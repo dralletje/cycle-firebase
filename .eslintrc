@@ -1,0 +1,17 @@
+{
+  "extends": "eslint-config-cycle",
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true
+  },
+  "rules": {
+    "no-undefined": 0,
+    "max-len": 0,
+    "object-curly-spacing": 0,
+    "no-multiple-empty-lines": 0,
+    "padded-blocks": 0,
+    "max-nested-callbacks": 0,
+    "complexity": 0
+  }
+}
