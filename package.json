@@ -1,7 +1,7 @@
 {
-  "name": "cycle-time-driver",
+  "name": "cycle-firebase",
   "version": "1.0.0",
-  "description": "Create intervals and timeouts the cyclejs way!",
+  "description": "Cycle driver for my favorite realtime database :)!",
   "main": "lib/firebase.js",
   "scripts": {
     "test": "mocha --compilers js:babel-register",
@@ -10,13 +10,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dralletje/cycle-time-driver.git"
+    "url": "git+https://github.com/dralletje/cycle-firebase.git"
   },
   "keywords": [
     "cyclejs",
-    "time",
-    "setInterval",
-    "setTimeout",
+    "firebase",
+    "realtime",
+    "declarative",
     "driver"
   ],
   "peerDependencies": {
@@ -43,8 +43,5 @@
     "mocha": "^2.4.5",
     "mockery": "^1.4.0",
     "rx": "^4.0.s"
-  },
-  "dependencies": {
-    "rx": "^2.4.1"
   }
 }
