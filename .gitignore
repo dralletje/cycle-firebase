@@ -7,3 +7,4 @@ example
 # Generated
 test/browser/page/tests-bundle.js
 lib/
+coverage/

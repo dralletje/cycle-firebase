@@ -6,6 +6,7 @@
   "scripts": {
     "test": "mocha --compilers js:babel-register",
     "build": "babel -d lib/ src/",
+    "coverage": "istanbul cover _mocha -- -R spec --compilers js:babel-register",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -39,6 +40,7 @@
     "eslint-config-cycle": "^3.1.0",
     "eslint-plugin-cycle": "^1.0.2",
     "eslint-plugin-no-class": "^0.1.0",
+    "istanbul": "^1.0.0-alpha.2",
     "markdox": "0.1.10",
     "mocha": "^2.4.5",
     "mockery": "^1.4.0",
