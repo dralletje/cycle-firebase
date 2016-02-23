@@ -51,7 +51,7 @@ Returns the firebase ref scoped to the same path as the firebase source.
 Useful in combination with `.value` and `.observe` as you'll see...
 
 
-#### `.set$(data: Any): Object`
+#### `.$set(data: Any): Object`
 Just wraps an object in `{ $set: object }` so the sink will
 recognize it as an overwrite of data, not an update.
 
