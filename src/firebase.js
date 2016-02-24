@@ -67,7 +67,7 @@ function makeFirebaseDriver(baseRef) {
     })
     // Small utility to wrap objects in a 'set' object
     let $set = object => {
-      return { set$: object }
+      return { $set: object }
     }
     let createChild = (path) => {
       return {
@@ -82,7 +82,7 @@ function makeFirebaseDriver(baseRef) {
           if (typeof childPath !== `string`) {
             throw new Error(`Required argument to .child has to be a string.`)
           }
-          createChild(`${path}/${childPath}`)
+          return createChild(`${path}/${childPath}`)
         },
 
         // Get the raw firebase ref of the current path

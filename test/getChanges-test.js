@@ -14,6 +14,14 @@ describe(`GetChanges`, () => {
     }])
   })
 
+  it(`should see a removal on a propertie`, () => {
+    let changes = getChanges({ value: 1 }, { value: null })
+
+    expect(changes).to.eql([{
+      location: `value`, value: null,
+    }])
+  })
+
   it(`should see a number transformation on a propertie`, () => {
     let changes = getChanges({ value: 1 }, { value: 2 })
 
