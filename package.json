@@ -1,6 +1,6 @@
 {
   "name": "cycle-firebase",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Cycle driver for my favorite realtime database :)!",
   "main": "lib/firebase.js",
   "scripts": {
