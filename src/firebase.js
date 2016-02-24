@@ -1,5 +1,6 @@
 import {Observable} from 'rx'
 import getChanges from './getChanges'
+import pushId from './pushId'
 
 // Observe an event by eventName on a firebase ref.
 // No magic or .val unpacking is done, just listening
@@ -58,6 +59,12 @@ function makeFirebaseDriver(baseRef) {
 
     // Get an observable over the current uid of the user
     let uid$ = uid(baseRef)
+    // Get an observable that will complete with one random ID
+    let pushId$ = Observable.create(observer => {
+      observer.onNext(pushId())
+      observer.onCompleted()
+      return () => {}
+    })
     // Small utility to wrap objects in a 'set' object
     let $set = object => {
       return { set$: object }
@@ -85,7 +92,7 @@ function makeFirebaseDriver(baseRef) {
         Methods without relation to the current path
         */
 
-        uid$, $set,
+        uid$, $set, pushId$,
         // Get an observable over a value of a custom query
         value: getValue,
         // Get an observable over a custom event of a custom query

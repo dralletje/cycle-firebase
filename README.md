@@ -50,14 +50,32 @@ Useful if you want a component to be bound to a smaller scope of data.
 Returns the firebase ref scoped to the same path as the firebase source.
 Useful in combination with `.value` and `.observe` as you'll see...
 
-
-#### `.$set(data: Any): Object`
-Just wraps an object in `{ $set: object }` so the sink will
-recognize it as an overwrite of data, not an update.
-
 #### `.uid$: Observable<Null|String>`
 Observable over the 'uid' of the current logged in user. If not user is
 logged in, it will yield null.
+
+#### `.pushId$: Observable<String>`
+Observable that will yield one random generated, firebase compatible, Id.
+This Id is generated exactly the way firebase would generate the Id for you,
+so you can use it safely as a key:
+
+```
+let someAction$ = ...
+
+let listWithRandomKeys$ = someAction$.flatMapLatest(x => {
+  return firebase.pushId$.map(id => {
+    return {
+      [id]: x,
+    }
+  })
+})
+
+return {
+  firebase: listWithRandomKeys$.map(list => {
+    return { list }
+  })
+}
+```
 
 #### `.value(FirebaseRef|FirebaseQuery): Observable`
 Will transform a firebase query or ref into an observable over it's
@@ -73,6 +91,9 @@ If you, for some weird reason, need to use any of the `child_xxx` events,
 `.observe` is for you. It wraps the event `eventName` in a very simple way
 so it becomes an observable. Most of the time, though, you want to use `.value`!
 
+#### `.$set(data: Any): Object`
+Just wraps an object in `{ $set: object }` so the sink will
+recognize it as an overwrite of data, not an update.
 
 ## Sink
 The sink expects the be fed object, describing the way you want the firebase DB to look.
