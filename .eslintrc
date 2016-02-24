@@ -12,6 +12,7 @@
     "no-multiple-empty-lines": 0,
     "padded-blocks": 0,
     "max-nested-callbacks": 0,
-    "complexity": 0
+    "complexity": 0,
+    "operator-linebreak": 0
   }
 }

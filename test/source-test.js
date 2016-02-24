@@ -35,7 +35,12 @@ describe(`Source`, () => {
     let makeChild = location => {
       return {
         _location: location,
-        child: sub => makeChild(`${location}/${sub}`),
+        child: sub => {
+          if (sub === ``) {
+            throw new Error(`Invalid path given to .child`)
+          }
+          return makeChild(`${location}/${sub}`)
+        },
         on: (...args) => {
           on(location, ...args)
           return args[1] // Return listener
@@ -55,6 +60,15 @@ describe(`Source`, () => {
     offAuth.reset()
   })
 
+  it(`should be able to set up a firebase base ref by string`, () => {
+    let source = makeFirebaseDriver(`http://url.firebaseio.com`)(Observable.empty())
+    let ref = source.ref()
+
+    expect(ref.child).to.exist
+    expect(ref.on).to.exist
+    expect(ref.off).to.exist
+    expect(ref.onAuth).to.exist
+  })
 
   it(`should be able to generate one pushId$`, () => {
     let source = getSource()

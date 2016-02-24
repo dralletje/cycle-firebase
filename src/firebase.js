@@ -2,6 +2,8 @@ import {Observable} from 'rx'
 import getChanges from './getChanges'
 import pushId from './pushId'
 
+import Firebase from 'firebase'
+
 // Observe an event by eventName on a firebase ref.
 // No magic or .val unpacking is done, just listening
 // and firing when being triggered.
@@ -41,7 +43,12 @@ const uid = (ref) => {
   })
 }
 
-function makeFirebaseDriver(baseRef) {
+function makeFirebaseDriver(_baseRef) {
+  let baseRef =
+    typeof _baseRef === `string`
+    ? new Firebase(_baseRef)
+    : _baseRef
+
   return function timeDriver(source$) {
     source$
     // Start with no changes at all
@@ -69,13 +76,18 @@ function makeFirebaseDriver(baseRef) {
     let $set = object => {
       return { $set: object }
     }
+
+    // Prevents errors when getting using an empty path
+    let getFbChild = (ref, location) =>
+      location === `` ? ref : ref.child(location)
+
     let createChild = (path) => {
       return {
         /*
         Methods based on current path
         */
         // Get an observable over value on current or sub-path
-        get: (childPath = ``) => getValue(baseRef.child(`${path}/${childPath}`)),
+        get: (childPath = ``) => getValue(getFbChild(baseRef, `${path}/${childPath}`)),
 
         // Get an object like this, scoped to the path specified
         child: childPath => {
@@ -86,7 +98,7 @@ function makeFirebaseDriver(baseRef) {
         },
 
         // Get the raw firebase ref of the current path
-        ref: () => baseRef.child(path),
+        ref: () => getFbChild(baseRef, path),
 
         /*
         Methods without relation to the current path

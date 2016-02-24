@@ -45,5 +45,8 @@
     "mocha": "^2.4.5",
     "mockery": "^1.4.0",
     "rx": "^4.0.s"
+  },
+  "dependencies": {
+    "firebase": "^2.4.1"
   }
 }
