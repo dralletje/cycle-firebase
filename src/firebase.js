@@ -1,8 +1,8 @@
 import {Observable} from 'rx'
+import Firebase from 'firebase'
+
 import getChanges from './getChanges'
 import pushId from './pushId'
-
-import Firebase from 'firebase'
 
 // Observe an event by eventName on a firebase ref.
 // No magic or .val unpacking is done, just listening
@@ -27,7 +27,7 @@ const observe = (ref, event) => {
 const getValue = (ref) => observe(ref, `value`).map(x => x.val())
 
 // Because firebase doesn't store this on /user or /uid or a custom event,
-// we need a full blown new function that uses .onNext instead of .on 😒
+// we need a full blown new function that uses .onAuth instead of .on 😒
 const uid = (ref) => {
   return Observable.create(observer => {
     const cb = (auth) => {
@@ -44,6 +44,7 @@ const uid = (ref) => {
 }
 
 function makeFirebaseDriver(_baseRef) {
+  // If the 'baseref' passed in is a string, we initialize the firebase ref ourselves
   let baseRef =
     typeof _baseRef === `string`
     ? new Firebase(_baseRef)
@@ -53,7 +54,7 @@ function makeFirebaseDriver(_baseRef) {
     source$
     // Start with no changes at all
     .startWith({})
-    // Pairwise to we can compare every tree with the previous
+    // Pairwise so we can compare every tree with the previous
     .pairwise()
     // Get a list of actions to transition to the next state
     .map(([prevState, nextState]) => getChanges(prevState, nextState))
@@ -66,12 +67,14 @@ function makeFirebaseDriver(_baseRef) {
 
     // Get an observable over the current uid of the user
     let uid$ = uid(baseRef)
+
     // Get an observable that will complete with one random ID
     let pushId$ = Observable.create(observer => {
       observer.onNext(pushId())
       observer.onCompleted()
       return () => {}
     })
+
     // Small utility to wrap objects in a 'set' object
     let $set = object => {
       return { $set: object }
