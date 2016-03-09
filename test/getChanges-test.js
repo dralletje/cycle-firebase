@@ -82,6 +82,12 @@ describe(`GetChanges`, () => {
     expect(changes).to.eql([])
   })
 
+  it(`should see $set objects references are the same`, () => {
+    let object = { value: 1 }
+    let changes = getChanges({ $set: object }, { $set: object })
+    expect(changes).to.eql([])
+  })
+
   it(`should see numbers are the same`, () => {
     let changes = getChanges({ value: 1 }, { value: 1 })
     expect(changes).to.eql([])

@@ -53,8 +53,12 @@ let getChanges = (prev, next, path = []) => {
         throw new Error(`Encountered object with key $set, but also others keys at '${location}'!`)
       }
       // Disallow empty objects, even in $set
-      if (Object.keys(next.$set).length === 0) {
+      if (typeof next.$set === `object` && next.$set !== null && Object.keys(next.$set).length === 0) {
         throw emptyObjectError()
+      }
+      // If the objects are the same, we don't update
+      if (prev && prev.$set === next.$set) {
+        return []
       }
       // And return a set operation with the value exact of next.$set
       return set(next.$set)
