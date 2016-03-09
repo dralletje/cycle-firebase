@@ -81,6 +81,39 @@ describe(`Source`, () => {
     expect(onCompleted).to.be.called.once()
   })
 
+  it(`should connect to onAuth when listening for $user`, () => {
+    let source = getSource()
+
+    let resource = source.get(`$user`).subscribe(Function.prototype)
+    expect(onAuth).to.be.called()
+
+    let fn = onAuth.__spy.calls[0][0] // Get callback that is registerd
+    expect(typeof fn).to.eql(`function`)
+
+    resource.dispose()
+    expect(offAuth).to.be.called.with(fn)
+  })
+
+  it(`should fire $user on 'onAuth' trigger`, () => {
+    let source = getSource()
+
+    let listener = chai.spy()
+    source.get(`$user`).subscribe(listener)
+    // Trigger onAuth
+    onAuth.__spy.calls[0][0]()
+    expect(listener).to.be.called()
+  })
+
+  it(`should accept deep special paths`, () => {
+    let source = getSource()
+
+    let listener = chai.spy()
+    source.get(`$user/uid`).subscribe(listener)
+    // Trigger onAuth
+    onAuth.__spy.calls[0][0]({ uid: `12345` })
+    expect(listener).to.be.called.with(`12345`)
+  })
+
   it(`should be able to generate two different pushId$s`, () => {
     let source = getSource()
     expect(source.$set({ value: 1 })).to.eql({ $set: { value: 1 }})
@@ -154,6 +187,17 @@ describe(`Source`, () => {
 
     expect(() => {
       source.child(1)
+    }).to.throw()
+  })
+
+  it(`should throw when listening to nonexisting special key`, () => {
+    let source = getSource()
+    expect(() => {
+      source.get(`$nonexinsting`)
+    }).to.throw()
+
+    expect(() => {
+      source.get(`$nonexinsting/stuff`)
     }).to.throw()
   })
 

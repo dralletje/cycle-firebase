@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha --compilers js:babel-register",
     "build": "babel -d lib/ src/",
-    "coverage": "istanbul cover _mocha -- -R spec --compilers js:babel-register",
+    "coverage": "istanbul cover _mocha -x pushId.js -- -R spec --compilers js:babel-register",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -47,6 +47,7 @@
     "rx": "^4.0.s"
   },
   "dependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.6.5",
     "firebase": "^2.4.1"
   }
 }

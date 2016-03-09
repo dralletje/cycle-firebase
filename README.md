@@ -41,6 +41,29 @@ Will yield null, just like firebase, if there is nothing set.
 This location is relative to the location of the firebase source
 object (so `.child` affets this method).
 
+There are two special locations you can listen for as well. Those are not
+coming from firebase, but provide info about the status of firebase in your app:
+
+**`$lastError: Observable<Error>`**
+Right now, is an observable over the last error emitted by the authentication
+part of your app. I am still thinking about putting that in the same observable
+as the user info itself (see next special location), but I figured it would be
+fine putting it here as well. It contains error objects from firebase itself.
+
+```
+firebase.get(`$lastError/message`).map(message => `An error occurred: ${message}`)
+```
+
+**`$user: Observable<Null|User>`**
+An observable over the current logged in user, or null. Use this instead of the
+now deprecated `firebase.uid$`. `User` here, is the 'raw' object emitted by
+firebases' `onAuth` method. It will emit once on subscription.
+
+```
+let isLoggedIn$ = firebase.get(`$user`).map(user => user !== null)
+```
+
+
 #### `.child(location: String): FirebaseDriverSource`
 Returns object similar to the original source, only scoped
 to the location specified, just like `firebaseRef.child`.
@@ -49,10 +72,6 @@ Useful if you want a component to be bound to a smaller scope of data.
 #### `.ref(): FirebaseRef`
 Returns the firebase ref scoped to the same path as the firebase source.
 Useful in combination with `.value` and `.observe` as you'll see...
-
-#### `.uid$: Observable<Null|String>`
-Observable over the 'uid' of the current logged in user. If not user is
-logged in, it will yield null.
 
 #### `.pushId$: Observable<String>`
 Observable that will yield one random generated, firebase compatible, Id.
@@ -101,6 +120,19 @@ It will assume any unmentioned key will be untouched, except for object from `.$
 It will look at the changes every time, and update the new keys.
 For removal, you'll have to explicitly set a key to null. Just not including the
 key anymore, won't make the driver remove it.
+
+#### Special location `$user`
+The `$user` location does not get mirrored in firebase, but instead updates
+the current user logged in. This can be done by setting (with $set!!!) the location
+to an object with a `type` property, and potentially more options.
+The possible types are:
+
+- **{ type: 'password', email, password }** uses `authWithPassword`
+- **{ type: 'password', create: true, email, password }** creates a user using `createUser` followed by `authWithPassword`
+- **{ type: 'token', token }** uses `authWithCustomToken`
+- **{ type: 'anonymously' }** uses `authAnonymously`
+- **{ type: 'oauth_popup', provider }** uses `authWithOAuthPopup`
+- **{ type: 'oauth_token', provider, token }** uses `authWithOAuthToken`
 
 #### Examples
 If the object changed from
