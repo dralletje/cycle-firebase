@@ -1,9 +1,6 @@
 # Installed libs
 node_modules
 
-# Local example
-example
-
 # Generated
 test/browser/page/tests-bundle.js
 lib/
