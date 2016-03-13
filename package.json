@@ -26,9 +26,9 @@
   "author": "Michiel Dral <michiel@dral.eu>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/dralletje/cycle-time-driver/issues"
+    "url": "https://github.com/dralletje/cycle-firebase/issues"
   },
-  "homepage": "https://github.com/dralletje/cycle-time-driver#readme",
+  "homepage": "https://github.com/dralletje/cycle-firebase#readme",
   "devDependencies": {
     "babel": "^6.5.2",
     "babel-cli": "^6.5.1",
@@ -44,7 +44,7 @@
     "markdox": "0.1.10",
     "mocha": "^2.4.5",
     "mockery": "^1.4.0",
-    "rx": "^4.0.s"
+    "rx": "^4.0.0"
   },
   "dependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.6.5",
